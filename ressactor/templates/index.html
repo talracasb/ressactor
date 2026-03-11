@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<p>Hello, {{ session.username }}!</p>
+
+<h1>Feed</h1>
+<div>
+{% for entry in feed.entries %}
+<div class="rss-post">
+    <h2><a href="{{ entry.link }}">{{ entry.title }}</a></h2>
+    <div class="summary">{{ entry.summary | safe }}</div>
+</div>
+{% endfor %}
+</div>
+{% endblock content %}

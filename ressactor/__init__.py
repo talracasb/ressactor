@@ -1,8 +1,10 @@
 from flask import *
 import os
+import feedparser
 
 from . import auth
 from .db import *
+
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -21,10 +23,11 @@ def create_app():
     return app
 
 app = create_app()
+feed = feedparser.parse(f"{app.instance_path}/feed.xml")
 
 @app.route('/')
 def index():
-    if 'username' in session:
-        return f'Logged in as {session["username"]}'
-    return 'You are not logged in'
+    if not 'username' in session:
+        return redirect(url_for('auth.login'))
+    return render_template("index.html", feed = feed)
 

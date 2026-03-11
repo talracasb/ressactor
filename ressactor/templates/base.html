@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <nav>
+      <h2 id="logo">Ressactor</h2>
+      <ul id="nav-links">
+        {% if session %}
+            <li><span>{{ session.username }}</span></li>
+            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+        {% else %}
+            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    <main>{% block content %}{% endblock %}</main>
+  </body>
+</html>

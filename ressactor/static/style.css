@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+}
+
+main {
+    padding: 1rem;
+}
+
+nav {
+    background-color: hsl(0, 0%, 90%);
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logo {
+    font-size: 1rem;
+    margin: 0;
+}
+
+#nav-links {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+}
+
+#nav-links li {
+    display: unset;
+}
+
+#nav-links a, #nav-links span {
+    color: black !important;
+    text-decoration: none;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+pre {
+    text-wrap: unset;
+}

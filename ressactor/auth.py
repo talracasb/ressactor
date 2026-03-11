@@ -1,6 +1,7 @@
 from .db import *
 from flask import *
 from argon2 import PasswordHasher
+from sqlalchemy.exc import *
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 ph = PasswordHasher()
@@ -16,9 +17,12 @@ def register():
         )
         
         db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            return abort(409, "Username taken.")
 
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
     return render_template("register.html")
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -30,7 +34,7 @@ def login():
             )
             ph.verify(user.password, request.form["password"])
         except:
-            abort(401)
+            return abort(401)
 
         session['username'] = user.username
         session['id'] = user.id
