@@ -1,16 +1,32 @@
 {% extends 'base.html' %}
 {% block title %}Index{% endblock %}
 
+{% block head %}
+<script>
+  async function comment(index, id) {
+    const body = document.getElementById(index)?.querySelector('.comment-content').value
+    await fetch(`/comment/${id}`, {
+      body,
+      method: "POST"
+    })
+  }
+</script>
+{% endblock %}
+
 {% block content %}
 <p>Hello, {{ session.username }}!</p>
 
 <h1>Feed</h1>
 <div>
-{% for entry in feed.entries %}
-<div class="rss-post">
+  {% for entry in feed.entries %}
+  <div class="rss-post" id="{{ loop.index0 }}">
     <h2><a href="{{ entry.link }}">{{ entry.title }}</a></h2>
     <div class="summary">{{ entry.summary | safe }}</div>
-</div>
-{% endfor %}
+    <div>
+      <button onclick="comment('{{ loop.index0 }}', '{{ entry.id }}')">Submit Comment</button>
+      <input type="text" class="comment-content" >
+    </div>
+  </div>
+  {% endfor %}
 </div>
 {% endblock content %}

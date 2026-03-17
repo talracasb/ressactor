@@ -22,7 +22,7 @@ def register():
         except IntegrityError:
             return abort(409, "Username taken.")
 
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     return render_template("register.html")
 
 @bp.route('/login', methods=['GET', 'POST'])
