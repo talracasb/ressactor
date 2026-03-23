@@ -43,3 +43,15 @@ h1 {
 pre {
     text-wrap: unset;
 }
+
+#comments {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 0.4rem;
+}
+
+.comment {
+    background-color: lightgray;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}

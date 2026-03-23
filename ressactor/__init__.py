@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from flask import *
 import os
 import feedparser
@@ -26,6 +28,9 @@ feed = feedparser.parse(f"{app.instance_path}/feed.xml")
 
 @app.route('/comment/<path:rss_id>', methods=["POST"])
 def comment(rss_id):
+    if not 'username' in session:
+        return "Not logged in", 401
+
     body = request.data.decode()
     
     post = db.session.query(Post).filter_by(rss_id=rss_id).first()
@@ -48,4 +53,15 @@ def comment(rss_id):
 def index():
     if not 'username' in session:
         return redirect(url_for('auth.login'))
-    return render_template("index.html", feed = feed)
+    
+    comments = defaultdict(list)
+    for comment in db.session.query(Comment).all():
+        comments[comment.post.rss_id].append(comment)
+    
+    for x in feed.entries:
+        x.id = x.id.split("#", 1)[0]
+    
+    return render_template("index.html",
+        feed=feed,                   
+        comments = comments
+    )

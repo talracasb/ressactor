@@ -1,19 +1,18 @@
-{% extends 'base.html' %}
-{% block title %}Index{% endblock %}
-
-{% block head %}
+{% extends 'base.html' %} {% block title %}Index{% endblock %} {% block head %}
 <script>
   async function comment(index, id) {
-    const body = document.getElementById(index)?.querySelector('.comment-content').value
+    const body = document
+      .getElementById(index)
+      ?.querySelector(".comment-content").value;
     await fetch(`/comment/${id}`, {
       body,
-      method: "POST"
-    })
+      method: "POST",
+    });
+
+    location.reload();
   }
 </script>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <p>Hello, {{ session.username }}!</p>
 
 <h1>Feed</h1>
@@ -23,10 +22,23 @@
     <h2><a href="{{ entry.link }}">{{ entry.title }}</a></h2>
     <div class="summary">{{ entry.summary | safe }}</div>
     <div>
-      <button onclick="comment('{{ loop.index0 }}', '{{ entry.id }}')">Submit Comment</button>
-      <input type="text" class="comment-content" >
+      <button onclick="comment('{{ loop.index0 }}', '{{ entry.id }}')">
+        Submit Comment
+      </button>
+      <input type="text" class="comment-content" />
     </div>
-  </div>
+    <h3>Comments</h3>
+    <div id="comments">
+      {% if not comments[entry.id] %}
+        <span>No comments</span>
+      {% endif %}
+      {% for comment in comments[entry.id] %}
+      <div class="comment">
+        <pre>{{ comment.user.username }} says:</pre>
+        <pre>{{ comment.content }}</pre>
+      </div>
+      {% endfor %}
+    </div>
   {% endfor %}
 </div>
 {% endblock content %}
